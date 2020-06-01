@@ -3,7 +3,7 @@ https://en.wikipedia.org/wiki/Restrictions_on_geographic_data_in_China
 https://github.com/sshuair/coord-convert
 https://github.com/googollee/eviltransform/blob/master/go/transform.go
 WGS84坐标系：即地球坐标系，国际上通用的坐标系。
-GCJ02坐标系：即火星坐标系，WGS84坐标系经加密后的坐标系。Google Maps，高德在用。
+GCJ02坐标系：即火星坐标系，WGS84坐标系经加密后的坐标系。
 BD09坐标系：即百度坐标系，GCJ02坐标系经加密后的坐标系。
 */
 
