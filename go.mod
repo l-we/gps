@@ -1,3 +1,3 @@
-module gps
+module github.com/l-we/gps
 
-go 1.14
+go 1.12
