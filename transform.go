@@ -47,7 +47,7 @@ func WGS84toGCJ02(lon, lat float64) (float64, float64) {
 	if inChina(lon, lat) {
 		return lon, lat
 	}
-	dLat, dLon := transform(lon-105.0, lat-35.0)
+	dLon, dLat := transform(lon-105.0, lat-35.0)
 	radLat := lat / 180.0 * math.Pi
 	magic := math.Sin(radLat)
 	magic = 1 - ee*magic*magic
@@ -65,26 +65,26 @@ func GCJ02toWGS84(lon, lat float64) (float64, float64) {
 }
 
 // GCJ02toWGS84Exact 火星坐标系->WGS84坐标系  精度小于0.5m 较GCJ02toWGS84慢15倍
-func GCJ02toWGS84Exact(gcjLat, gcjLng float64) (wgsLat, wgsLng float64) {
-	dLat, dLng := 0.01, 0.01
-	mLat, mLng := gcjLat-dLat, gcjLng-dLng
-	pLat, pLng := gcjLat+dLat, gcjLng+dLng
+func GCJ02toWGS84Exact(lon, lat float64) (wgsLon, wgsLat float64) {
+	dLon, dLat := 0.01, 0.01
+	mLon, mLat := lon-dLon, lat-dLat
+	pLon, pLat := lon+dLon, lat+dLat
 	for {
-		wgsLat, wgsLng = (mLat+pLat)/2, (mLng+pLng)/2
-		tmpLat, tmpLng := WGS84toGCJ02(wgsLat, wgsLng)
-		dLat, dLng = tmpLat-gcjLat, tmpLng-gcjLng
-		if math.Abs(dLat) < threshold && math.Abs(dLng) < threshold {
+		wgsLon, wgsLat = (mLon+pLon)/2, (mLat+pLat)/2
+		tmpLon, tmpLat := WGS84toGCJ02(wgsLon, wgsLat)
+		dLon, dLat = tmpLon-lon, tmpLat-lat
+		if math.Abs(dLon) < threshold && math.Abs(dLat) < threshold {
 			return
+		}
+		if dLon > 0 {
+			pLon = wgsLon
+		} else {
+			mLon = wgsLon
 		}
 		if dLat > 0 {
 			pLat = wgsLat
 		} else {
 			mLat = wgsLat
-		}
-		if dLng > 0 {
-			pLng = wgsLng
-		} else {
-			mLng = wgsLng
 		}
 	}
 }
@@ -100,25 +100,25 @@ func WGS84toBD09(lon, lat float64) (float64, float64) {
 }
 
 // WebMCtoWGS84 球面墨卡托->WGS84坐标系
-func WebMCtoWGS84(x, y float64) (float64, float64) {
+func WebMCtoWGS84(x, y float64) (lon, lat float64) {
 	if !(x >= -mc && x <= mc) {
 		return x, y
 	}
-	lng := x / mc * 180
-	lat := y / mc * 180
+	lon = x / mc * 180
+	lat = y / mc * 180
 	lat = 180 / math.Pi * (2*math.Atan(math.Exp(lat*math.Pi/180)) - math.Pi/2)
-	return lng, lat
+	return lon, lat
 }
 
 // WGS84toWebMC WGS84坐标系->球面墨卡托
-func WGS84toWebMC(lon, lat float64) (float64, float64) {
-	x := lon * mc / 180
-	y := math.Log(math.Tan((90+lat)*math.Pi/360)) / (math.Pi / 180)
+func WGS84toWebMC(lon, lat float64) (x, y float64) {
+	x = lon * mc / 180
+	y = math.Log(math.Tan((90+lat)*math.Pi/360)) / (math.Pi / 180)
 	y = y * mc / 180
 	return x, y
 }
 
-func transform(x, y float64) (lat, lon float64) {
+func transform(x, y float64) (lon, lat float64) {
 	absX := math.Sqrt(math.Abs(x))
 	xPi, yPi := x*math.Pi, y*math.Pi
 	d := 20.0*math.Sin(6.0*xPi) + 20.0*math.Sin(2.0*xPi)
@@ -194,11 +194,10 @@ func BD09toBD09MC(lon, lat float64) (float64, float64) {
 	return convert(lon, lat, f)
 }
 
-func convert(x, y float64, f []float64) (float64, float64) {
-	lon := f[0] + f[1]*math.Abs(x)
+func convert(x, y float64, f []float64) (lon, lat float64) {
+	lon = f[0] + f[1]*math.Abs(x)
 	cc := math.Abs(y) / f[9]
 
-	var lat float64
 	for i := 0; i <= 6; i++ {
 		lat += f[i+2] * math.Pow(cc, float64(i))
 	}
