@@ -4,9 +4,12 @@
 - https://en.wikipedia.org/wiki/Restrictions_on_geographic_data_in_China
 - https://github.com/sshuair/coord-convert
 - https://github.com/googollee/eviltransform/blob/master/go/transform.go
-- WGS84坐标系：即地球坐标系，国际上通用的坐标系。
-- GCJ02坐标系：即火星坐标系，WGS84坐标系经加密后的坐标系。
-- BD09坐标系：即百度坐标系，GCJ02坐标系经加密后的坐标系。
+- WGS84：即地球坐标系，国际上通用的坐标系。
+- WebMC：即Web墨卡托，Web映射上的事实标准。
+- ZXY：即瓦片坐标系，瓦片地图的切割方式。
+- GCJ02：即火星坐标系，WGS84坐标系经加密后的坐标系。
+- BD09：即百度坐标系，GCJ02坐标系经加密后的坐标系。
+- BD09MC：即百度Web墨卡托，Web墨卡托经2次加密后的坐标系。
 
 Installation
 ------
@@ -42,5 +45,8 @@ func main() {
 	fmt.Println(transform.WebMCtoWGS84(13529697, 3633994))
 	fmt.Println(transform.BD09MCtoBD09(13529697, 3633994))
 	fmt.Println(transform.BD09MCtoWGS84(13529697, 3633994))
+
+	fmt.Println(transform.ZXYtoWebMCBound(12, 3429, 1673))
+	fmt.Println(transform.ZXYtoWGS84Bound(12, 3429, 1673))
 }
 ```

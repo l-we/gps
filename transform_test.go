@@ -5,7 +5,7 @@ import (
 )
 
 func Test_transform(t *testing.T) {
-	t.Log(BD09toBD09MC(121.43827095288565, 31.033977088152476))
+	t.Log(BD09toBD09MC(121.431863, 31.027647))
 }
 
 func Benchmark_transform(b *testing.B) {
