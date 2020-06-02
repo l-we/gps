@@ -12,15 +12,17 @@ import (
 
 // ZXYtoWebMCBound SlippyMap->球面墨卡托边界
 func ZXYtoWebMCBound(z, x, y float64) [4]int {
-	north, east := ZXYtoWebMC(z, x, y)
-	south, west := ZXYtoWebMC(z, x+1, y+1)
+	east, north := ZXYtoWebMC(z, x, y)
+	west, south := ZXYtoWebMC(z, x+1, y+1)
 	return [4]int{east, south, west, north}
 }
 
 // ZXYtoWebMC SlippyMap->球面墨卡托
-func ZXYtoWebMC(z, x, y float64) (yMc, xMc int) {
+func ZXYtoWebMC(z, x, y float64) (xMc, yMc int) {
 	res := mc * 2 / math.Pow(2, z)
-	return int(-y*res + mc), int(x*res - mc)
+	xMc = int(x*res - mc)
+	yMc = int(-y*res + mc)
+	return
 }
 
 // ZXYtoWGS84Bound SlippyMap->WGS84坐标系边界
