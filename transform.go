@@ -7,7 +7,7 @@ GCJ02坐标系：即火星坐标系，WGS84坐标系经加密后的坐标系。
 BD09坐标系：即百度坐标系，GCJ02坐标系经加密后的坐标系。
 */
 
-package gps
+package transform
 
 import (
 	"math"
