@@ -33,7 +33,7 @@ func ZXYtoWGS84Bound(z, x, y int) [4]float64 {
 }
 
 // WGS84toZXY WGS84坐标系->SlippyMap
-func WGS84toZXY(lon, lat float64, z uint64) (x, y int) {
+func WGS84toZXY(lon, lat float64, z int) (x, y int) {
 	x = int(math.Floor((lon + 180.0) / 360.0 * (math.Exp2(float64(z)))))
 	y = int(math.Floor((1.0 - math.Log(math.Tan(lat*math.Pi/180.0)+1.0/math.Cos(lat*math.Pi/180.0))/math.Pi) / 2.0 * (math.Exp2(float64(z)))))
 	return
